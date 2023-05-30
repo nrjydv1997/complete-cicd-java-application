@@ -10,7 +10,7 @@ pipeline {
     stages{
         
         stage('Workspace cleanup'){
-          //  when {expression{parms.action == 'create'}}
+          when {expression{params.action == 'create'}}
 
             steps{
                 cleanWs()
@@ -18,7 +18,7 @@ pipeline {
         }
 
         stage('Git Checkout'){
-            when {expression{parms.action == 'create'}}
+            when {expression{params.action == 'create'}}
 
             steps{
                 gitCheckout(
@@ -29,7 +29,7 @@ pipeline {
         }
 
         stage('Unit test maven'){
-         //   when {expression{parms.action == 'create'}}
+         when {expression{params.action == 'create'}}
 
             steps{
                  mvnTest()
@@ -37,7 +37,7 @@ pipeline {
         }
 
         stage('Maven Integration Test'){
-         //  when {expression{parms.action == 'create'}}
+         when {expression{params.action == 'create'}}
 
             steps{
                  mvnIntegrationTest()
@@ -45,7 +45,7 @@ pipeline {
         }
 
         stage('Static code analysis'){
-          //  when {expression{parms.action == 'create'}}
+          when {expression{params.action == 'create'}}
             
             steps{
                 staticCodeAnalysis()
