@@ -98,5 +98,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker Image Push'){
+          when {expression{params.action == 'create'}} 
+            steps{
+                script{
+                    dockerPush("${params.hubUser}","${projectName}","${ImageTag}")
+                }
+            }
+        }
     }
 }
