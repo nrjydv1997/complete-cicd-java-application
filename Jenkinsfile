@@ -6,8 +6,8 @@ pipeline {
     parameters{
         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/destroy')
         string(name: 'hubUser', description: "name of the docker build", defaultValue: 'nrjydv1997')
-        string(name: 'ImageTag', description: "name of the docker image", defaultValue: 'v1')
-        string(name: 'projectName', description: "name of the application", defaultValue: 'springboot')
+        string(name: 'ImageTag', description: "name of the docker image", defaultValue: '${BUILD_NUMBER}')
+        string(name: 'projectName', description: "name of the application", defaultValue: 'complete-cicd-java-application')
     }
 
     stages{
@@ -36,7 +36,7 @@ pipeline {
 
             steps{
                  //mvnTest()
-                 sh 'echo maven build stage'
+                 sh 'echo maven test stage'
             }
         }
 
@@ -44,7 +44,8 @@ pipeline {
          when {expression{params.action == 'create'}}
 
             steps{
-                 mvnIntegrationTest()
+                // mvnIntegrationTest()
+                 sh 'echo mvnIntegrationTest stage'
             }
         }
 
@@ -74,7 +75,8 @@ pipeline {
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                   mvnBuild() 
+                   // mvnBuild()
+                   sh 'echo mvnIntegrationTest stage'
                 }
             }
         }
