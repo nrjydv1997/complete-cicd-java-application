@@ -35,7 +35,8 @@ pipeline {
          when {expression{params.action == 'create'}}
 
             steps{
-                 mvnTest()
+                 //mvnTest()
+                 sh 'echo maven build stage'
             }
         }
 
@@ -73,8 +74,7 @@ pipeline {
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                    //mvnBuild()
-                    sh 'echo maven build stage'
+                   mvnBuild() 
                 }
             }
         }
