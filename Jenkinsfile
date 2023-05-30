@@ -73,7 +73,8 @@ pipeline {
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                    mvnBuild()
+                    //mvnBuild()
+                    sh 'echo maven build stage'
                 }
             }
         }
