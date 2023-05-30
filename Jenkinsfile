@@ -51,13 +51,5 @@ pipeline {
                 staticCodeAnalysis()
             }
         }
-
-        stage('Static code analysis'){
-            when {expression{parm.action == 'create'}}
-            
-            steps{
-                staticCodeAnalysis()
-            }
-        }
     }
 }
