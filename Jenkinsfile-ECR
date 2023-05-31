@@ -79,7 +79,33 @@ pipeline {
                 }
             }
         }
+        
+        stage('Docker Image Build: ECR'){
+            steps{
+                script{
+                    sh "docker build -t ${REPOSITORY_URI} ."
+                }
+            }
+        }
 
-    
+        stage('Docker Image Scan: ECR'){
+            steps{
+                script{
+                    //dockerImageScanECR("${ACCOUNT_ID}","${DEFAULLT_REGION}","${IMAGE_REPO_NAME")
+                    sh "trivy image ${REPOSITORY_URI}:latest >scan.txt"
+                    sh "cat scan.txt"
+                }
+            }
+        }
+
+        stage('Docker Image Push: ECR'){
+            steps{
+                script{
+                    //dockerPushECR("${params.aws_account_id}","${params.region}","${params.ecr_repo_name}")
+                    sh "docker push ${REPOSITORY_URI}:latest"
+                }
+            }
+        }
+
     }
 }
