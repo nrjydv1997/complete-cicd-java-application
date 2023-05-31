@@ -14,6 +14,14 @@ pipeline {
         string(name: 'ecr_repo_name', description: "name of ecr repo", defaultValue: 'complete-cicd-java-application')
     }
 
+    environment {
+        ACCOUNT_ID = '744531651118'
+        DEFAULLT_REGION = 'ap-south-1'
+        IMAGE_REPO_NAME = 'complete-cicd-java-application'
+        IMAGE_TAG = '${BUILD_NUMBER}'
+        REPOSITORY_URI = "${ACCOUNT_ID}.dkr.ecr.${DEFAULLT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+    }
+
     stages{
         
         stage('Workspace cleanup'){
@@ -34,7 +42,7 @@ pipeline {
                 )
             }
         }
-
+/*
         stage('Unit test maven'){
          when {expression{params.action == 'create'}}
 
@@ -82,16 +90,25 @@ pipeline {
                 }
             }
         }
-
+*/
         stage('Docker Image Build: ECR'){
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                    dockerBuildECR("${params.aws_account_id}","${params.region}","${params.ecr_repo_name}")
+                    sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 744531651118.dkr.ecr.ap-south-1.amazonaws.com"
                 }
             }
         }
-
+        stage('Docker Image Build: ECR'){
+          when {expression{params.action == 'create'}} 
+            steps{
+                script{
+                    //dockerBuildECR("${params.aws_account_id}","${params.region}","${params.ecr_repo_name}")
+                    docker build -t ${REPOSITORY_URI} .
+                }
+            }
+        }
+/*
         stage('Docker Image Scan: ECR'){
           when {expression{params.action == 'create'}} 
             steps{
@@ -100,12 +117,13 @@ pipeline {
                 }
             }
         }
-
+*/
         stage('Docker Image Push: ECR'){
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                    dockerPushECR("${params.aws_account_id}","${params.region}","${params.ecr_repo_name}")
+                    //dockerPushECR("${params.aws_account_id}","${params.region}","${params.ecr_repo_name}")
+                    docker push 744531651118.dkr.ecr.ap-south-1.amazonaws.com/complete-cicd-java-application:latest
                 }
             }
         }
