@@ -10,6 +10,11 @@ pipeline {
         string(name: 'projectName', description: "name of the application", defaultValue: 'complete-cicd-java-application')
     }
 
+    environment {
+        APP_NAME = 'complete-cicd-java-application'
+        IMAGE_NAME = 'nrjydv1997/complete-cicd-java-application'
+    }
+
     stages{
         
         stage('Workspace cleanup'){
@@ -85,7 +90,9 @@ pipeline {
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                    dockerBuild("${params.hubUser}","${projectName}","${ImageTag}")
+                    //dockerBuild("${params.hubUser}","${projectName}","${ImageTag}")
+
+                    dockerImage = dcker.build "${IMAGE_NAME}"
                 }
             }
         }
@@ -94,7 +101,11 @@ pipeline {
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                    dockerImageScan("${params.hubUser}","${projectName}","${ImageTag}")
+                    //dockerImageScan("${params.hubUser}","${projectName}","${ImageTag}")
+                    sh """
+                        trivy image ${IMAGE_NAME}:latest >scan.txt
+                        cat scan.txt
+                    """
                 }
             }
         }
@@ -103,7 +114,9 @@ pipeline {
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                    dockerPush("${params.hubUser}","${projectName}","${ImageTag}")
+                    //dockerPush("${params.hubUser}","${projectName}","${ImageTag}")
+
+                    sh 'echo image push'
                 }
             }
         }
