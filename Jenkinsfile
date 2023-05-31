@@ -1,12 +1,7 @@
 @Library('jenkins_shared_lib') _
 
 pipeline {
-    agent {
-    docker {
-      image 'abhishekf5/maven-abhishek-docker-agent:v1'
-      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
-    }
-  }
+    agent any
 
     parameters{
         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/destroy')
