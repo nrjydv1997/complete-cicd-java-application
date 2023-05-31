@@ -100,7 +100,7 @@ pipeline {
                 }
             }
         }
-/*
+
         stage('Docker Image Push'){
           when {expression{params.action == 'create'}} 
             steps{
@@ -110,6 +110,6 @@ pipeline {
             }
         }
 
-        */
+        
     }
 }
