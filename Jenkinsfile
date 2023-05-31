@@ -43,15 +43,16 @@ pipeline {
                  //sh 'echo maven test stage'
             }
         }
-/*
+
         stage('Maven Integration Test'){
          when {expression{params.action == 'create'}}
 
             steps{
-                // mvnIntegrationTest()
-                 sh 'echo mvnIntegrationTest stage'
+                 mvnIntegrationTest()
+                // sh 'echo mvnIntegrationTest stage'
             }
         }
+/*
 
         stage('Static code analysis'){
           when {expression{params.action == 'create'}} 
