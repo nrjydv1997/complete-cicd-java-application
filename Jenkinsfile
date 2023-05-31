@@ -10,7 +10,7 @@ pipeline {
     parameters{
         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/destroy')
         string(name: 'hubUser', description: "name of the docker build", defaultValue: 'nrjydv1997')
-        string(name: 'ImageTag', description: "name of the docker image", defaultValue: '${BUILD_NUMBER}')
+        string(name: 'ImageTag', description: "name of the docker image", defaultValue: 'v1')
         string(name: 'projectName', description: "name of the application", defaultValue: 'complete-cicd-java-application')
     }
 
@@ -110,6 +110,13 @@ pipeline {
             }
         }
 
-        
+        stage('Docker Image CleanUp'){
+          when {expression{params.action == 'create'}} 
+            steps{
+                script{
+                    dockerImageCleanUp("${params.hubUser}","${projectName}","${ImageTag}")
+                }
+            }
+        }
     }
 }
