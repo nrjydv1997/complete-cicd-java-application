@@ -1,0 +1,95 @@
+@Library('jenkins_shared_lib') _
+
+pipeline {
+    agent any
+    
+    tools {
+        maven 'maven3'
+    }
+
+    parameters{
+        choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/destroy')
+        string(name: 'aws_account_id', description: "Aws account id", defaultValue: '744531651118')
+        string(name: 'region', description: "name of the ecr-region", defaultValue: 'ap-south-1')
+        string(name: 'ecr_repo_name', description: "name of ecr repo", defaultValue: 'complete-cicd-java-application')
+    }
+
+    stages{
+        
+        stage('Workspace cleanup'){
+          when {expression{params.action == 'create'}}
+
+            steps{
+                cleanWs()
+            }
+        }
+
+        stage('Git Checkout'){
+            when {expression{params.action == 'create'}}
+
+            steps{
+                gitCheckout(
+                    branch: "main",
+                    url: "https://github.com/nrjydv1997/complete-cicd-java-application.git"
+                )
+            }
+        }
+
+        stage('Unit test maven'){
+         when {expression{params.action == 'create'}}
+
+            steps{
+                 mvnTest()
+            }
+        }
+
+        stage('Maven Integration Test'){
+         when {expression{params.action == 'create'}}
+
+            steps{
+                 mvnIntegrationTest()
+            }
+        }
+
+
+        stage('Static code analysis'){
+          when {expression{params.action == 'create'}} 
+            steps{
+                script{
+                    def SonarQubeCredentialsId = 'sonar-api'
+                    staticCodeAnalysis(SonarQubeCredentialsId)
+                
+                }
+            }
+        }
+
+        stage('Quality Gate Status'){
+          when {expression{params.action == 'create'}} 
+            steps{
+                script{
+                    def SonarQubeCredentialsId = 'sonar-api'
+                    qualityGateStatus(SonarQubeCredentialsId)
+                
+                }
+            }
+        }
+
+        stage('Maven Build'){
+          when {expression{params.action == 'create'}} 
+            steps{
+                script{
+                    mvnBuild()
+                }
+            }
+        }
+
+        stage('Docker Image Build: ECR'){
+          when {expression{params.action == 'create'}} 
+            steps{
+                script{
+                    dockerBuildECR("${params.aws_account_id}","${params.region}","${params.ecr_repo_name}")
+                }
+            }
+        }
+    }
+}
