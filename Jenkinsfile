@@ -10,11 +10,6 @@ pipeline {
         string(name: 'projectName', description: "name of the application", defaultValue: 'complete-cicd-java-application')
     }
 
-    environment {
-        APP_NAME = 'complete-cicd-java-application'
-        IMAGE_NAME = 'nrjydv1997/complete-cicd-java-application'
-    }
-
     stages{
         
         stage('Workspace cleanup'){
@@ -35,7 +30,7 @@ pipeline {
                 )
             }
         }
-
+/*
         stage('Unit test maven'){
          when {expression{params.action == 'create'}}
 
@@ -53,7 +48,7 @@ pipeline {
                  sh 'echo mvnIntegrationTest stage'
             }
         }
-/*
+
         stage('Static code analysis'){
           when {expression{params.action == 'create'}} 
             steps{
@@ -75,7 +70,7 @@ pipeline {
                 }
             }
         }
-*/
+
         stage('Maven Build'){
           when {expression{params.action == 'create'}} 
             steps{
@@ -90,13 +85,7 @@ pipeline {
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                    //dockerBuild("${params.hubUser}","${projectName}","${ImageTag}")
-
-                    sh """
-                            docker image build -t ${hubUser}/${project} .
-                            docker image tag ${hubUser}/${project} ${hubUser}/${project}:${imageTag}
-                            docker image tag ${hubUser}/${project} ${hubUser}/${project}:latest
-                            """                    
+                    dockerBuild("${params.hubUser}","${projectName}","${ImageTag}")
                 }
             }
         }
@@ -105,11 +94,7 @@ pipeline {
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                    //dockerImageScan("${params.hubUser}","${projectName}","${ImageTag}")
-                    sh """
-                        trivy image ${IMAGE_NAME}:latest >scan.txt
-                        cat scan.txt
-                    """
+                    dockerImageScan("${params.hubUser}","${projectName}","${ImageTag}")
                 }
             }
         }
@@ -118,11 +103,11 @@ pipeline {
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                    //dockerPush("${params.hubUser}","${projectName}","${ImageTag}")
-
-                    sh 'echo image push'
+                    dockerPush("${params.hubUser}","${projectName}","${ImageTag}")
                 }
             }
         }
+
+        */
     }
 }
