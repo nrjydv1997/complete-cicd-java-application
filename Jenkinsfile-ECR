@@ -31,6 +31,46 @@ pipeline {
                 )
             }
         }
+        
+        stage('Unit test maven'){
+            steps{
+                 mvnTest()
+            }
+        }
+
+        stage('Maven Integration Test'){
+            steps{
+                 mvnIntegrationTest()
+            }
+        }
+
+        stage('Static code analysis'){
+            steps{
+                script{
+                    def SonarQubeCredentialsId = 'sonar-api'
+                    staticCodeAnalysis(SonarQubeCredentialsId)
+                
+                }
+            }
+        }
+
+        stage('Quality Gate Status'){
+            steps{
+                script{
+                    def SonarQubeCredentialsId = 'sonar-api'
+                    qualityGateStatus(SonarQubeCredentialsId)
+                
+                }
+            }
+        }
+
+        stage('Maven Build'){
+            steps{
+                script{
+                    mvnBuild()
+                }
+            }
+        }
 
         stage('Login ECR'){
             steps{
