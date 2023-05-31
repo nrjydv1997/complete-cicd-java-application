@@ -40,7 +40,6 @@ pipeline {
 
             steps{
                  mvnTest()
-                 //sh 'echo maven test stage'
             }
         }
 
@@ -49,7 +48,6 @@ pipeline {
 
             steps{
                  mvnIntegrationTest()
-                // sh 'echo mvnIntegrationTest stage'
             }
         }
 
@@ -75,17 +73,16 @@ pipeline {
                 }
             }
         }
-/*
+
         stage('Maven Build'){
           when {expression{params.action == 'create'}} 
             steps{
                 script{
-                   // mvnBuild()
-                   sh 'echo mvnIntegrationTest stage'
+                    mvnBuild()
                 }
             }
         }
-
+/*
         stage('Docker Image Build'){
           when {expression{params.action == 'create'}} 
             steps{
