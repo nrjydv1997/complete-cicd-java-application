@@ -6,14 +6,14 @@ pipeline {
     tools {
         maven 'maven3'
     }
-/*
-    parameters{
+
+   /* parameters{
         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/destroy')
         string(name: 'aws_account_id', description: "Aws account id", defaultValue: '744531651118')
         string(name: 'region', description: "name of the ecr-region", defaultValue: 'ap-south-1')
         string(name: 'ecr_repo_name', description: "name of ecr repo", defaultValue: 'complete-cicd-java-application')
-    }
-*/
+    }*/
+
     environment {
         ACCOUNT_ID = '744531651118'
         DEFAULLT_REGION = 'ap-south-1'
@@ -38,8 +38,8 @@ pipeline {
                 )
             }
         }
-/*
-        stage('Unit test maven'){
+
+        /*stage('Unit test maven'){
          when {expression{params.action == 'create'}}
 
             steps{
@@ -85,10 +85,9 @@ pipeline {
                     mvnBuild()
                 }
             }
-        }
-*/
+        }*/
+
         stage('Docker Image Build: ECR'){
-          when {expression{params.action == 'create'}} 
             steps{
                 script{
                     sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 744531651118.dkr.ecr.ap-south-1.amazonaws.com"
@@ -97,25 +96,23 @@ pipeline {
         }
 
         stage('Docker Image Build: ECR'){
-          when {expression{params.action == 'create'}} 
             steps{
                 script{
                     docker build -t ${REPOSITORY_URI} .
                 }
             }
         }
-/*
-        stage('Docker Image Scan: ECR'){
+
+        /*stage('Docker Image Scan: ECR'){
           when {expression{params.action == 'create'}} 
             steps{
                 script{
                     dockerImageScanECR("${params.aws_account_id}","${params.region}","${params.ecr_repo_name}")
                 }
             }
-        }
-*/
+        }*/
+
         stage('Docker Image Push: ECR'){
-          when {expression{params.action == 'create'}} 
             steps{
                 script{
                     //dockerPushECR("${params.aws_account_id}","${params.region}","${params.ecr_repo_name}")
@@ -124,5 +121,5 @@ pipeline {
             }
         }
     
-    }
+    
 }
