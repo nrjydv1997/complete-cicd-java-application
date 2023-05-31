@@ -39,8 +39,8 @@ pipeline {
          when {expression{params.action == 'create'}}
 
             steps{
-                 //mvnTest()
-                 sh 'echo maven test stage'
+                 mvnTest()
+                 //sh 'echo maven test stage'
             }
         }
 /*
