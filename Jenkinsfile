@@ -34,7 +34,7 @@ pipeline {
                 )
             }
         }
-/*
+
         stage('Unit test maven'){
          when {expression{params.action == 'create'}}
 
@@ -43,7 +43,7 @@ pipeline {
                  sh 'echo maven test stage'
             }
         }
-
+/*
         stage('Maven Integration Test'){
          when {expression{params.action == 'create'}}
 
