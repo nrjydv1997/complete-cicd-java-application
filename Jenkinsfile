@@ -2,6 +2,10 @@
 
 pipeline {
     agent any
+    
+    tools {
+        maven 'maven3'
+    }
 
     parameters{
         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/destroy')
