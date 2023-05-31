@@ -34,7 +34,7 @@ pipeline {
                 )
             }
         }
-        
+        /*
         stage('Unit test maven'){
             steps{
                  mvnTest()
@@ -107,7 +107,7 @@ pipeline {
                 }
             }
         }
-
+       
         stage('Docker Image CleanUp: ECR'){
             steps{
                 script{
@@ -116,13 +116,20 @@ pipeline {
                 }
             }
         }
+        */
 
-        dir('eks_module') {    
-            sh """          
-                terraform init 
-                terraform plan -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' -var 'region=${DEFAULLT_REGION}' --var-file=./config/terraform.tfvars
-                terraform apply -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' -var 'region=${DEFAULLT_REGION}' --var-file=./config/terraform.tfvars --auto-approve
-            """
+        stage('Create EKS Cluster : Terraform'){
+            steps{
+                script{
+                    dir('eks_module') {    
+                       sh """          
+                           terraform init 
+                          terraform plan -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' -var 'region=${DEFAULLT_REGION}' --var-file=./config/terraform.tfvars
+                          terraform apply -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' -var 'region=${DEFAULLT_REGION}' --var-file=./config/terraform.tfvars --auto-approve
+                      """
+                    }
+                }
+            }
         }
     }
 }
