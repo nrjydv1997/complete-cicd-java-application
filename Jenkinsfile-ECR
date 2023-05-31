@@ -32,7 +32,7 @@ pipeline {
                 )
             }
         }
-        
+        /*
         stage('Unit test maven'){
             steps{
                  mvnTest()
@@ -72,11 +72,11 @@ pipeline {
                 }
             }
         }
-
+        */
         stage('Login ECR'){
             steps{
                 script{
-                    sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 744531651118.dkr.ecr.ap-south-1.amazonaws.com"
+                    sh "aws ecr get-login-password --region ${DEFAULLT_REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${DEFAULLT_REGION}.amazonaws.com"
                 }
             }
         }
@@ -84,7 +84,7 @@ pipeline {
         stage('Docker Image Build: ECR'){
             steps{
                 script{
-                    dockerBuildECR("${REPOSITORY_URI}")
+                    dockerBuildECR("${ACCOUNT_ID}","${IMAGE_REPO_NAME}","${DEFAULLT_REGION}","${IMAGE_TAG}")
                 }
             }
         }
@@ -92,7 +92,7 @@ pipeline {
         stage('Docker Image Scan: ECR'){
             steps{
                 script{
-                    dockerImageScanECR("${REPOSITORY_URI}")
+                    dockerImageScanECR("${ACCOUNT_ID}","${IMAGE_REPO_NAME}","${DEFAULLT_REGION}","${IMAGE_TAG}")
                 }
             }
         }
@@ -112,6 +112,7 @@ pipeline {
                 }
             }
         }
+        
 
     }
 }
