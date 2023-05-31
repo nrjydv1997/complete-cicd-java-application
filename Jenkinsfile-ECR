@@ -114,7 +114,13 @@ pipeline {
                 }
             }
         }
-        
 
+        stage('DCluster setup: terraform'){
+            steps{
+                script{
+                    sh "echo hello"
+                }
+            }
+        }
     }
 }
