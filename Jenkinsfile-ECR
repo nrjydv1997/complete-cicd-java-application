@@ -32,7 +32,7 @@ pipeline {
                 )
             }
         }
-        /*
+        
         stage('Unit test maven'){
             steps{
                  mvnTest()
@@ -72,7 +72,7 @@ pipeline {
                 }
             }
         }
-        */
+        
         stage('Login ECR'){
             steps{
                 script{
@@ -92,7 +92,8 @@ pipeline {
         stage('Docker Image Scan: ECR'){
             steps{
                 script{
-                    dockerImageScanECR("${ACCOUNT_ID}","${IMAGE_REPO_NAME}","${DEFAULLT_REGION}","${IMAGE_TAG}")
+                 //   dockerImageScanECR("${ACCOUNT_ID}","${IMAGE_REPO_NAME}","${DEFAULLT_REGION}","${IMAGE_TAG}")
+                    dockerImageScanECR("${REPOSITORY_URI}")
                 }
             }
         }
