@@ -109,8 +109,8 @@ pipeline {
         stage('Docker Image CleanUp: ECR'){
             steps{
                 script{
-                    //dockerImageCleanUp("${ACCOUNT_ID}","${IMAGE_REPO_NAME}","${DEFAULLT_REGION}","${IMAGE_TAG}")
-                    dockerImageCleanUp("${REPOSITORY_URI}","${IMAGE_TAG}")
+                    dockerImageCleanUpECR("${ACCOUNT_ID}","${IMAGE_REPO_NAME}","${DEFAULLT_REGION}","${IMAGE_TAG}")
+                   // dockerImageCleanUp("${REPOSITORY_URI}","${IMAGE_TAG}")
                 }
             }
         }
