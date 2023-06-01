@@ -13,9 +13,6 @@ pipeline {
         IMAGE_REPO_NAME = 'complete-cicd-java-application'
         IMAGE_TAG = '${BUILD_NUMBER}'
         REPOSITORY_URI = "${ACCOUNT_ID}.dkr.ecr.${DEFAULLT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
-        ACCESS_KEY = credentials('AWS_ACCESS_KEY')
-        SECRET_KEY = credentials('AWS_SECRET_KEY')
-
     }
 
     stages{
@@ -34,7 +31,7 @@ pipeline {
                 )
             }
         }
-        /*
+        
         stage('Unit test maven'){
             steps{
                  mvnTest()
@@ -116,20 +113,6 @@ pipeline {
                 }
             }
         }
-        */
-
-        stage('Create EKS Cluster : Terraform'){
-            steps{
-                script{
-                    dir('eks-cluster') {    
-                       sh """          
-                           terraform init 
-                           terraform plan
-                           terraform apply --auto-approve
-                      """
-                    }
-                }
-            }
-        }
+        
     }
 }
