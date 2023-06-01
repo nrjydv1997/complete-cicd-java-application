@@ -19,7 +19,6 @@ resource "aws_eks_node_group" "eksnode" {
   }
 
   depends_on = [
-    aws_eks_cluster.eksdemo,
     aws_iam_role_policy_attachment.eksnoderole-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.eksnoderole-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.eksnoderole-AmazonEC2ContainerRegistryReadOnly,
