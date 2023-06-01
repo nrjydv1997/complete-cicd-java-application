@@ -121,7 +121,7 @@ pipeline {
         stage('Create EKS Cluster : Terraform'){
             steps{
                 script{
-                    dir('eks_module') {    
+                    dir('eks-cluster') {    
                        sh """          
                            terraform init 
                            terraform plan
